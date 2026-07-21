@@ -1,0 +1,52 @@
+# Build & local state
+/build/
+/build-*/
+/data/
+*.db
+compile_commands.json
+cmake-build-*/
+*.o
+*.a
+.DS_Store
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# Editor / tooling
+.vscode/
+.idea/
+.cursor/
+*.log
+*.swp
+*~
+
+# Dashboard
+/dashboard/node_modules/
+/dashboard/.next/
+/dashboard/out/
+/dashboard/.vercel/
+/dashboard/.env*.local
+/dashboard/.v0-trash/
+
+# Third-party source archives (keep extracted trees)
+/third_party/*.tar.gz
+/third_party/*.zip
+/third_party/*.tgz
+
+# Trim vendored package noise (not required to build)
+/third_party/Catch2-*/docs/
+/third_party/Catch2-*/examples/
+/third_party/Catch2-*/tests/
+/third_party/Catch2-*/fuzzing/
+/third_party/Catch2-*/.github/
+/third_party/Catch2-*/data/
+/third_party/json-*/docs/
+/third_party/json-*/tests/
+/third_party/json-*/tools/
+/third_party/spdlog-*/example/
+/third_party/spdlog-*/bench/
+/third_party/spdlog-*/tests/
+/third_party/yaml-cpp-*/test/
+/third_party/yaml-cpp-*/docs/
