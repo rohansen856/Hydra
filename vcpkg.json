@@ -1,0 +1,15 @@
+{
+  "name": "serverless-cpp",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "boost-asio",
+    "boost-beast",
+    "boost-system",
+    "boost-thread",
+    "nlohmann-json",
+    "sqlite3",
+    "spdlog",
+    "yaml-cpp",
+    "catch2"
+  ]
+}
