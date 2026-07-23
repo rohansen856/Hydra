@@ -1,0 +1,33 @@
+server:
+  host: 0.0.0.0
+  port: 8080
+
+scheduler:
+  queue_limit: 10000
+  queue_timeout_ms: 3000
+
+scaling:
+  interval_ms: 1000
+  busy_threshold: 0.70
+  idle_timeout_ms: 60000
+  max_scale_step: 4
+
+default_function:
+  timeout_ms: 5000
+  memory_mb: 128
+  max_concurrency: 10
+
+storage:
+  db_path: data/serverless.db
+  functions_dir: data/functions
+
+limits:
+  max_request_bytes: 1048576
+  max_response_bytes: 1048576
+
+logging:
+  level: info
+
+node:
+  heartbeat_interval_ms: 5000
+  missed_heartbeats_threshold: 3
