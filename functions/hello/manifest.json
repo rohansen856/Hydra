@@ -1,0 +1,9 @@
+{
+  "name": "hello",
+  "version": "1",
+  "command": "./build/functions/hello-function",
+  "timeout_ms": 5000,
+  "memory_mb": 128,
+  "min_workers": 1,
+  "max_workers": 10
+}
