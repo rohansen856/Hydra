@@ -1,0 +1,9 @@
+{
+  "name": "hello-node",
+  "version": "1",
+  "command": "/app/functions/hello_node/run.sh",
+  "timeout_ms": 5000,
+  "memory_mb": 128,
+  "min_workers": 0,
+  "max_workers": 4
+}
