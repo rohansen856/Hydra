@@ -1,0 +1,64 @@
+services:
+  control-plane:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - serverless-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:8080/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  seed:
+    image: curlimages/curl:8.10.1
+    depends_on:
+      control-plane:
+        condition: service_healthy
+    volumes:
+      - ./scripts/docker-seed.sh:/seed.sh:ro
+    entrypoint: ["/bin/sh", "/seed.sh"]
+    environment:
+      SERVERLESS_URL: http://control-plane:8080
+    restart: "no"
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+    depends_on:
+      control-plane:
+        condition: service_healthy
+
+  worker-node-a:
+    profiles: [multi-node]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["/app/build/worker_node", "/app/config/config.yaml", "control-plane", "8080"]
+    depends_on:
+      control-plane:
+        condition: service_healthy
+
+  worker-node-b:
+    profiles: [multi-node]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["/app/build/worker_node", "/app/config/config.yaml", "control-plane", "8080"]
+    depends_on:
+      control-plane:
+        condition: service_healthy
+
+volumes:
+  serverless-data:

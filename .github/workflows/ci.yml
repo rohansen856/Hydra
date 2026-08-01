@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake git libboost-all-dev
+      - name: Build and unit test
+        run: ./scripts/build.sh
+      - name: Build with ASan
+        run: |
+          cmake -S . -B build-asan -DENABLE_SANITIZERS=ON
+          cmake --build build-asan -j2
+
+  docker-e2e:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker E2E
+        run: |
+          chmod +x scripts/*.sh
+          ./scripts/docker-e2e.sh
