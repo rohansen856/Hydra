@@ -49,10 +49,10 @@ pass "readyz"
 
 # 3-4. Register and invoke C++ hello
 CPP_CMD="${SERVERLESS_CPP_HELLO:-${ROOT}/build/functions/hello-function}"
-if [[ ! -x "$CPP_CMD" && -x "/app/build/functions/hello-function" ]]; then
-  CPP_CMD="/app/build/functions/hello-function"
+if [[ ! "$CPP_CMD" == /app/* ]]; then
+  # Local path — verify the binary exists on this host
+  [[ -x "$CPP_CMD" ]] || fail "C++ hello-function not found at ${CPP_CMD}"
 fi
-[[ -x "$CPP_CMD" ]] || fail "C++ hello-function not found at ${CPP_CMD}"
 
 register_function hello "{\"name\":\"hello\",\"version\":\"1\",\"command\":\"${CPP_CMD}\",\"min_workers\":1,\"max_workers\":4}" "register cpp hello"
 pass "register C++ hello"
@@ -68,8 +68,9 @@ pass "invoke C++ hello"
 
 # 5. Python function
 PY_CMD="${SERVERLESS_PY_HELLO:-${ROOT}/functions/hello_python/run.sh}"
-[[ -x "$PY_CMD" ]] || PY_CMD="/app/functions/hello_python/run.sh"
-[[ -x "$PY_CMD" ]] || fail "Python run.sh not found"
+if [[ ! "$PY_CMD" == /app/* ]]; then
+  [[ -x "$PY_CMD" ]] || fail "Python run.sh not found"
+fi
 
 register_function hello-python "{\"name\":\"hello-python\",\"version\":\"1\",\"command\":\"${PY_CMD}\",\"min_workers\":0,\"max_workers\":4}" "register python hello"
 pass "register Python hello"
@@ -85,8 +86,9 @@ pass "invoke Python hello"
 
 # 6. Node function
 NODE_CMD="${SERVERLESS_NODE_HELLO:-${ROOT}/functions/hello_node/run.sh}"
-[[ -x "$NODE_CMD" ]] || NODE_CMD="/app/functions/hello_node/run.sh"
-[[ -x "$NODE_CMD" ]] || fail "Node run.sh not found"
+if [[ ! "$NODE_CMD" == /app/* ]]; then
+  [[ -x "$NODE_CMD" ]] || fail "Node run.sh not found"
+fi
 
 register_function hello-node "{\"name\":\"hello-node\",\"version\":\"1\",\"command\":\"${NODE_CMD}\",\"min_workers\":0,\"max_workers\":4}" "register node hello"
 pass "register Node hello"
